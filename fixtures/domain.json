@@ -1,8 +1,9 @@
 {
-  "domain": "innovation-resource-commitment",
-  "version": 1,
+  "domain": "innovation-resource-commitment-fulfillment",
+  "version": 2,
   "sample_id": "092201-005",
   "record_types": [
+    "项目",
     "项目缺口",
     "资源目录",
     "服务承诺",
@@ -11,22 +12,915 @@
     "转化结果"
   ],
   "workflow_states": [
-    "待匹配",
+    "待承诺",
     "已承诺",
-    "已排期",
+    "等待接受方确认",
+    "已确认占用",
     "履约中",
     "部分完成",
-    "已核验"
+    "已完成",
+    "已核验",
+    "已取消",
+    "已转交",
+    "已延期",
+    "已拒绝",
+    "已释放(未确认超时)",
+    "等待提供方确认结果"
   ],
   "facts": [
     "路演平台连接政企单位、创投机构和创业校友",
     "服务覆盖项目打磨、资源对接和产业落地",
-    "常态化交流旨在推动科研成果转化"
+    "常态化交流旨在推动科研成果转化",
+    "项目先确认所处阶段与具体资源缺口，再进入匹配",
+    "承诺必须由提供方作出，并带明确责任人、容量与答复/确认期限",
+    "同一提供方同一时段不能重复承诺给多个项目",
+    "接受方确认后才实际占用资源；逾期未确认的承诺自动失效、容量回池",
+    "取消、转交、延期或只完成一部分都必须登记去向说明",
+    "团队打开服务即可看到下一次对接的明确联系人与截止时间",
+    "提供方可登记履约结果并由接受方核验",
+    "统计口径为已核验的试制、验证与合作成果，而非对接次数或名片交换数",
+    "保密项目的对外提醒不得暴露其融资状态、机构名单与估值"
   ],
   "sample": {
-    "project": "低功耗芯片验证样例",
-    "resource": "中试设备时段",
-    "provider": "合作园区",
-    "due_days": 30
+    "scenario_as_of": "2027-01-20",
+    "timeline_through": "2027-01-25",
+    "projects": [
+      {
+        "id": "PRJ-01",
+        "name": "低功耗芯片验证项目",
+        "team_name": "峰波微电子团队",
+        "stage": "样机验证",
+        "contact_user_id": "U-LEAD-01",
+        "confidential": false,
+        "confidential_fields": []
+      },
+      {
+        "id": "PRJ-02",
+        "name": "固态电池中试项目",
+        "team_name": "燧能科技团队",
+        "stage": "中试放大",
+        "contact_user_id": "U-LEAD-02",
+        "confidential": true,
+        "confidential_fields": [
+          "funding_status",
+          "investor_outreach",
+          "valuation"
+        ]
+      },
+      {
+        "id": "PRJ-03",
+        "name": "柔性传感贴片项目",
+        "team_name": "同行者传感团队",
+        "stage": "样机验证",
+        "contact_user_id": "U-LEAD-03",
+        "confidential": false,
+        "confidential_fields": []
+      }
+    ],
+    "users": [
+      {
+        "id": "U-LEAD-01",
+        "name": "周以安",
+        "role": "项目负责人",
+        "organization": "峰波微电子团队",
+        "phone": "13800000001",
+        "confidential_view": true
+      },
+      {
+        "id": "U-LEAD-02",
+        "name": "黎朗",
+        "role": "项目负责人",
+        "organization": "燧能科技团队",
+        "phone": "13800000002",
+        "confidential_view": true
+      },
+      {
+        "id": "U-LEAD-03",
+        "name": "何蹊",
+        "role": "项目负责人",
+        "organization": "同行者传感团队",
+        "phone": "13800000010",
+        "confidential_view": false
+      },
+      {
+        "id": "U-MENTOR-A",
+        "name": "陈工",
+        "role": "创业导师（原芯片企业研发副总）",
+        "organization": "九龙湖创新生态圈",
+        "phone": "13800000003",
+        "confidential_view": false
+      },
+      {
+        "id": "U-PARK-01",
+        "name": "林栖凤",
+        "role": "园区运营经理",
+        "organization": "合作园区·溪村智造园",
+        "phone": "13800000004",
+        "confidential_view": false
+      },
+      {
+        "id": "U-PARK-02",
+        "name": "柯在",
+        "role": "中试基地值班负责人",
+        "organization": "合作园区·溪村智造园",
+        "phone": "13800000005",
+        "confidential_view": false
+      },
+      {
+        "id": "U-IND-01",
+        "name": "高松",
+        "role": "测试中心主任",
+        "organization": "某大型制造企业测试中心",
+        "phone": "13800000006",
+        "confidential_view": true
+      },
+      {
+        "id": "U-INV-01",
+        "name": "沈静",
+        "role": "投资经理",
+        "organization": "启澜资本",
+        "phone": "13800000007",
+        "confidential_view": true
+      },
+      {
+        "id": "U-POLICY-01",
+        "name": "方准",
+        "role": "政策服务专员",
+        "organization": "政务服务团队",
+        "phone": "13800000008",
+        "confidential_view": false
+      },
+      {
+        "id": "U-MENTOR-B",
+        "name": "罗闻",
+        "role": "创业导师（可充电电池方向）",
+        "organization": "九龙湖创新生态圈",
+        "phone": "13800000009",
+        "confidential_view": false
+      }
+    ],
+    "gaps": [
+      {
+        "id": "GAP-01",
+        "project_id": "PRJ-01",
+        "stage": "样机验证",
+        "type": "导师时段",
+        "description": "需要熟悉先进封装方向的导师审视芯片验证计划与测试覆盖度",
+        "priority": "高",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-10-20"
+      },
+      {
+        "id": "GAP-02",
+        "project_id": "PRJ-01",
+        "stage": "样机验证",
+        "type": "设备场地",
+        "description": "需要3个月试制场地，含双工位焊接、小型铣床、存储柜及24小时门禁",
+        "priority": "高",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-10-01"
+      },
+      {
+        "id": "GAP-03",
+        "project_id": "PRJ-01",
+        "stage": "样机验证",
+        "type": "企业试验",
+        "description": "需要制造企业测试线对3批工程片做高低温循环与老化测试",
+        "priority": "中",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-11-15"
+      },
+      {
+        "id": "GAP-04",
+        "project_id": "PRJ-01",
+        "stage": "样机验证",
+        "type": "融资接洽",
+        "description": "希望接触关注半导体早期项目的投资机构开展尽调洽谈",
+        "priority": "中",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-11-30"
+      },
+      {
+        "id": "GAP-05",
+        "project_id": "PRJ-01",
+        "stage": "样机验证",
+        "type": "政策协助",
+        "description": "咨询高新技术企业认定与研发费用加计扣除材料的组织方式",
+        "priority": "低",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-12-31"
+      },
+      {
+        "id": "GAP-06",
+        "project_id": "PRJ-02",
+        "stage": "中试放大",
+        "type": "导师时段",
+        "description": "需要电池工艺放大方向导师审视中试工艺参数窗口",
+        "priority": "高",
+        "declared_at": "2026-09-22",
+        "needed_by": "2026-10-10",
+        "funding_status": "正在洽谈A轮（保密）",
+        "investor_outreach": "已接触3家机构，勿对外展示",
+        "valuation": "3.2亿元（数据仅供内部）"
+      },
+      {
+        "id": "GAP-07",
+        "project_id": "PRJ-03",
+        "stage": "样机验证",
+        "type": "设备场地",
+        "description": "同样需要Q4三个月试制场地，平台尝试将SLT-SITE-Q4重复承诺给该项目",
+        "priority": "中",
+        "declared_at": "2026-09-23",
+        "needed_by": "2026-10-08"
+      },
+      {
+        "id": "GAP-08",
+        "project_id": "PRJ-02",
+        "stage": "中试放大",
+        "type": "设备场地",
+        "description": "需要独立进出的三个月中试工位，用于电池样品装配，要求与其他团队物理隔断",
+        "priority": "高",
+        "declared_at": "2026-09-23",
+        "needed_by": "2026-10-08"
+      },
+      {
+        "id": "GAP-09",
+        "project_id": "PRJ-02",
+        "stage": "中试放大",
+        "type": "政策协助",
+        "description": "需要以代号方式咨询科技型中小企业申报，所有对外材料脱敏",
+        "priority": "中",
+        "declared_at": "2027-01-12",
+        "needed_by": "2027-02-10",
+        "funding_status": "正在洽谈A轮（保密）",
+        "investor_outreach": "已接触3家机构，勿对外展示",
+        "valuation": "3.2亿元（数据仅供内部）"
+      }
+    ],
+    "resources": [
+      {
+        "id": "RES-MENTOR-A",
+        "type": "导师时段",
+        "title": "陈工·先进封装导师时段（每周二上午）",
+        "provider_org": "九龙湖创新生态圈",
+        "owner_id": "U-MENTOR-A",
+        "commit_reply_deadline_days": 3,
+        "confirm_deadline_days": 5,
+        "slots": [
+          {
+            "slot_id": "SLT-A-1013",
+            "start": "2026-10-13T09:00+08:00",
+            "end": "2026-10-13T11:00+08:00",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-A-1020",
+            "start": "2026-10-20T09:00+08:00",
+            "end": "2026-10-20T11:00+08:00",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-A-1027",
+            "start": "2026-10-27T09:00+08:00",
+            "end": "2026-10-27T11:00+08:00",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "id": "RES-SITE-3M",
+        "type": "设备场地",
+        "title": "溪村智造园·三个月试制工位（B-204）",
+        "provider_org": "合作园区·溪村智造园",
+        "owner_id": "U-PARK-01",
+        "commit_reply_deadline_days": 5,
+        "confirm_deadline_days": 7,
+        "slots": [
+          {
+            "slot_id": "SLT-SITE-Q4",
+            "start": "2026-10-01",
+            "end": "2026-12-31",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-SITE-EXT",
+            "start": "2027-01-04",
+            "end": "2027-01-19",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-SITE-B205-Q4",
+            "start": "2026-10-08",
+            "end": "2027-02-07",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "id": "RES-TEST-LINE",
+        "type": "企业试验",
+        "title": "某制造企业测试线·高低温循环与老化试验",
+        "provider_org": "某大型制造企业测试中心",
+        "owner_id": "U-IND-01",
+        "commit_reply_deadline_days": 7,
+        "confirm_deadline_days": 5,
+        "slots": [
+          {
+            "slot_id": "SLT-TST-W46",
+            "start": "2026-11-09",
+            "end": "2026-11-14",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-TST-W48",
+            "start": "2026-11-23",
+            "end": "2026-11-28",
+            "capacity": 2
+          },
+          {
+            "slot_id": "SLT-TST-W05",
+            "start": "2027-02-01",
+            "end": "2027-02-06",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "id": "RES-DD-01",
+        "type": "融资接洽",
+        "title": "启澜资本·早期硬科技项目初步尽调接洽",
+        "provider_org": "启澜资本",
+        "owner_id": "U-INV-01",
+        "commit_reply_deadline_days": 5,
+        "confirm_deadline_days": 3,
+        "slots": [
+          {
+            "slot_id": "SLT-DD-1015",
+            "start": "2026-10-15T14:00+08:00",
+            "end": "2026-10-15T15:30+08:00",
+            "capacity": 1
+          },
+          {
+            "slot_id": "SLT-DD-1022",
+            "start": "2026-10-22T14:00+08:00",
+            "end": "2026-10-22T15:30+08:00",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "id": "RES-POLICY-HP",
+        "type": "政策协助",
+        "title": "高企认定与研发加计扣除材料辅导专场",
+        "provider_org": "政务服务团队",
+        "owner_id": "U-POLICY-01",
+        "commit_reply_deadline_days": 7,
+        "confirm_deadline_days": 7,
+        "slots": [
+          {
+            "slot_id": "SLT-POL-1105",
+            "start": "2026-11-05T10:00+08:00",
+            "end": "2026-11-05T11:30+08:00",
+            "capacity": 5
+          },
+          {
+            "slot_id": "SLT-POL-0202",
+            "start": "2027-02-02T10:00+08:00",
+            "end": "2027-02-02T11:30+08:00",
+            "capacity": 5
+          }
+        ]
+      },
+      {
+        "id": "RES-MENTOR-B",
+        "type": "导师时段",
+        "title": "罗闻·电池工艺放大导师时段",
+        "provider_org": "九龙湖创新生态圈",
+        "owner_id": "U-MENTOR-B",
+        "commit_reply_deadline_days": 3,
+        "confirm_deadline_days": 5,
+        "slots": [
+          {
+            "slot_id": "SLT-B-1008",
+            "start": "2026-10-08T14:00+08:00",
+            "end": "2026-10-08T16:00+08:00",
+            "capacity": 1
+          }
+        ]
+      }
+    ],
+    "commitments": [
+      {
+        "id": "CMT-01",
+        "gap_id": "GAP-01",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-MENTOR-A",
+        "slot_id": "SLT-A-1013",
+        "provider_org": "九龙湖创新生态圈",
+        "responsible_user_id": "U-MENTOR-A",
+        "capacity": 1,
+        "quantity": "导师辅导1次2小时",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-25",
+        "confirm_deadline": "2026-09-27",
+        "state": "已核验",
+        "receiver_confirmed_at": "2026-09-23",
+        "occupancy_id": "OCC-01",
+        "handover": null,
+        "disposition": null,
+        "next_action": {
+          "who": "U-MENTOR-A",
+          "what": "按10-13评审约定，在10-27复盘中检查新增边界温度用例执行情况",
+          "by": "2026-10-27",
+          "contact": {
+            "name": "陈工",
+            "phone": "13800000003"
+          }
+        }
+      },
+      {
+        "id": "CMT-02",
+        "gap_id": "GAP-02",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-SITE-3M",
+        "slot_id": "SLT-SITE-Q4",
+        "provider_org": "合作园区·溪村智造园",
+        "responsible_user_id": "U-PARK-02",
+        "capacity": 1,
+        "quantity": "试制工位1间×3个月（2026-10-01至2026-12-31）",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-27",
+        "confirm_deadline": "2026-09-29",
+        "state": "部分完成",
+        "receiver_confirmed_at": "2026-09-24",
+        "occupancy_id": "OCC-02",
+        "handover": {
+          "from_user_id": "U-PARK-01",
+          "to_user_id": "U-PARK-02",
+          "at": "2026-10-15",
+          "reason": "林栖凤轮岗，场地门禁、物业与工位调整等日常对接改由值班负责人柯在承接",
+          "acknowledged_by_receiver_at": "2026-10-16"
+        },
+        "disposition": {
+          "type": "延期",
+          "detail": "园区消防检修占用2026-12-21至2027-01-03共约16天，剩余可用日顺延至SLT-SITE-EXT（2027-01-04至2027-01-19）",
+          "reported_at": "2026-12-20",
+          "new_slot_id": "SLT-SITE-EXT"
+        },
+        "next_action": {
+          "who": "U-PARK-02",
+          "what": "顺延时段1月19日到期后，与团队核对16天顺延的实际使用并补登记履约回执",
+          "by": "2027-01-22",
+          "contact": {
+            "name": "柯在",
+            "phone": "13800000005"
+          }
+        }
+      },
+      {
+        "id": "CMT-03",
+        "gap_id": "GAP-03",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-TEST-LINE",
+        "slot_id": "SLT-TST-W46",
+        "provider_org": "某大型制造企业测试中心",
+        "responsible_user_id": "U-IND-01",
+        "capacity": 1,
+        "quantity": "第46周测试线1条，可测3批工程片",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-29",
+        "confirm_deadline": "2026-09-27",
+        "state": "已取消",
+        "receiver_confirmed_at": null,
+        "occupancy_id": null,
+        "handover": null,
+        "disposition": {
+          "type": "取消",
+          "detail": "工程片流片周期延后，第46周无法送样；接受方在确认占用前提出取消，该时段容量即时回池，供候补项目承接",
+          "reported_at": "2026-09-26",
+          "acknowledged_by_provider_at": "2026-09-26",
+          "released_capacity_to": "资源候补池"
+        },
+        "next_action": null
+      },
+      {
+        "id": "CMT-04",
+        "gap_id": "GAP-04",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-DD-01",
+        "slot_id": "SLT-DD-1015",
+        "provider_org": "启澜资本",
+        "responsible_user_id": "U-INV-01",
+        "capacity": 1,
+        "quantity": "尽调洽谈1次90分钟",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-27",
+        "confirm_deadline": "2026-09-25",
+        "state": "已释放(未确认超时)",
+        "receiver_confirmed_at": null,
+        "occupancy_id": null,
+        "handover": null,
+        "disposition": {
+          "type": "取消",
+          "detail": "团队未在2026-09-25前确认，承诺失效，10-15尽调时段自动回池；缺口GAP-04仍为待承诺状态，可重新发起匹配",
+          "reported_at": "2026-09-26",
+          "released_capacity_to": "资源候补池"
+        },
+        "next_action": {
+          "who": "U-LEAD-01",
+          "what": "如仍需融资接洽，在服务内重新确认SLT-DD-1022时段",
+          "by": "2026-10-18",
+          "contact": {
+            "name": "沈静",
+            "phone": "13800000007"
+          }
+        }
+      },
+      {
+        "id": "CMT-05",
+        "gap_id": "GAP-05",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-POLICY-HP",
+        "slot_id": "SLT-POL-1105",
+        "provider_org": "政务服务团队",
+        "responsible_user_id": "U-POLICY-01",
+        "capacity": 1,
+        "quantity": "辅导专场席位1个（专场总容量5个）",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-29",
+        "confirm_deadline": "2026-09-29",
+        "state": "已核验",
+        "receiver_confirmed_at": "2026-09-25",
+        "occupancy_id": "OCC-03",
+        "handover": null,
+        "disposition": null,
+        "next_action": null
+      },
+      {
+        "id": "CMT-06",
+        "gap_id": "GAP-06",
+        "project_id": "PRJ-02",
+        "resource_id": "RES-MENTOR-B",
+        "slot_id": "SLT-B-1008",
+        "provider_org": "九龙湖创新生态圈",
+        "responsible_user_id": "U-MENTOR-B",
+        "capacity": 1,
+        "quantity": "工艺评审1次2小时（仅基于脱敏资料）",
+        "made_at": "2026-09-22",
+        "commit_reply_by": "2026-09-25",
+        "confirm_deadline": "2026-09-27",
+        "state": "已核验",
+        "receiver_confirmed_at": "2026-09-23",
+        "occupancy_id": "OCC-04",
+        "handover": null,
+        "disposition": null,
+        "next_action": null
+      },
+      {
+        "id": "CMT-07",
+        "gap_id": "GAP-07",
+        "project_id": "PRJ-03",
+        "resource_id": "RES-SITE-3M",
+        "slot_id": "SLT-SITE-Q4",
+        "provider_org": "合作园区·溪村智造园",
+        "responsible_user_id": "U-PARK-01",
+        "capacity": 1,
+        "quantity": "重复承诺尝试（同一时段已由CMT-02占用）",
+        "made_at": "2026-09-23",
+        "commit_reply_by": "2026-09-28",
+        "confirm_deadline": "2026-09-30",
+        "state": "已拒绝",
+        "receiver_confirmed_at": null,
+        "occupancy_id": null,
+        "handover": null,
+        "disposition": {
+          "type": "取消",
+          "detail": "同一提供方同一时段剩余容量为0，不得重复承诺给其他项目；建议改匹配其他季度时段",
+          "reported_at": "2026-09-23",
+          "released_capacity_to": "未占用，直接驳回"
+        },
+        "next_action": null
+      },
+      {
+        "id": "CMT-08",
+        "gap_id": "GAP-03",
+        "project_id": "PRJ-01",
+        "resource_id": "RES-TEST-LINE",
+        "slot_id": "SLT-TST-W05",
+        "provider_org": "某大型制造企业测试中心",
+        "responsible_user_id": "U-IND-01",
+        "capacity": 1,
+        "quantity": "2027年第5周测试线席位1个（该周总容量2）",
+        "made_at": "2027-01-18",
+        "commit_reply_by": "2027-01-25",
+        "confirm_deadline": "2027-01-24",
+        "state": "等待接受方确认",
+        "receiver_confirmed_at": null,
+        "occupancy_id": null,
+        "handover": null,
+        "disposition": null,
+        "next_action": {
+          "who": "U-LEAD-01",
+          "what": "确认2月第5周送样安排并回填送样批次与数量；逾期未确认将自动释放",
+          "by": "2027-01-24",
+          "contact": {
+            "name": "高松",
+            "phone": "13800000006"
+          }
+        }
+      },
+      {
+        "id": "CMT-09",
+        "gap_id": "GAP-08",
+        "project_id": "PRJ-02",
+        "resource_id": "RES-SITE-3M",
+        "slot_id": "SLT-SITE-B205-Q4",
+        "provider_org": "合作园区·溪村智造园",
+        "responsible_user_id": "U-PARK-02",
+        "capacity": 1,
+        "quantity": "独立隔断中试工位1间×4个月（2026-10-08至2027-02-07）",
+        "made_at": "2026-09-24",
+        "commit_reply_by": "2026-09-29",
+        "confirm_deadline": "2026-10-01",
+        "state": "履约中",
+        "receiver_confirmed_at": "2026-09-26",
+        "occupancy_id": "OCC-05",
+        "handover": null,
+        "disposition": null,
+        "next_action": {
+          "who": "U-PARK-02",
+          "what": "核对1月独立门禁与隔断使用记录，并与项目方确认2月工位续用安排",
+          "by": "2027-01-25",
+          "contact": {
+            "name": "柯在",
+            "phone": "13800000005"
+          }
+        }
+      },
+      {
+        "id": "CMT-10",
+        "gap_id": "GAP-09",
+        "project_id": "PRJ-02",
+        "resource_id": "RES-POLICY-HP",
+        "slot_id": "SLT-POL-0202",
+        "provider_org": "政务服务团队",
+        "responsible_user_id": "U-POLICY-01",
+        "capacity": 1,
+        "quantity": "2027年首场政策辅导席位1个（项目以代号报名，资料脱敏）",
+        "made_at": "2027-01-15",
+        "commit_reply_by": "2027-01-22",
+        "confirm_deadline": "2027-01-24",
+        "state": "已确认占用",
+        "receiver_confirmed_at": "2027-01-17",
+        "occupancy_id": "OCC-06",
+        "handover": null,
+        "disposition": null,
+        "next_action": {
+          "who": "U-POLICY-01",
+          "what": "按项目代号准备科技型中小企业申报材料清单，勿向会场其他人员透露项目身份",
+          "by": "2027-01-26",
+          "contact": {
+            "name": "方准",
+            "phone": "13800000008"
+          }
+        }
+      }
+    ],
+    "occupancies": [
+      {
+        "id": "OCC-01",
+        "commitment_id": "CMT-01",
+        "resource_id": "RES-MENTOR-A",
+        "slot_id": "SLT-A-1013",
+        "project_id": "PRJ-01",
+        "units": 1,
+        "from": "2026-10-13T09:00+08:00"
+      },
+      {
+        "id": "OCC-02",
+        "commitment_id": "CMT-02",
+        "resource_id": "RES-SITE-3M",
+        "slot_id": "SLT-SITE-Q4",
+        "project_id": "PRJ-01",
+        "units": 1,
+        "from": "2026-10-01"
+      },
+      {
+        "id": "OCC-03",
+        "commitment_id": "CMT-05",
+        "resource_id": "RES-POLICY-HP",
+        "slot_id": "SLT-POL-1105",
+        "project_id": "PRJ-01",
+        "units": 1,
+        "from": "2026-11-05T10:00+08:00"
+      },
+      {
+        "id": "OCC-04",
+        "commitment_id": "CMT-06",
+        "resource_id": "RES-MENTOR-B",
+        "slot_id": "SLT-B-1008",
+        "project_id": "PRJ-02",
+        "units": 1,
+        "from": "2026-10-08T14:00+08:00"
+      },
+      {
+        "id": "OCC-05",
+        "commitment_id": "CMT-09",
+        "resource_id": "RES-SITE-3M",
+        "slot_id": "SLT-SITE-B205-Q4",
+        "project_id": "PRJ-02",
+        "units": 1,
+        "from": "2026-10-08"
+      },
+      {
+        "id": "OCC-06",
+        "commitment_id": "CMT-10",
+        "resource_id": "RES-POLICY-HP",
+        "slot_id": "SLT-POL-0202",
+        "project_id": "PRJ-02",
+        "units": 1,
+        "from": "2027-02-02T10:00+08:00"
+      }
+    ],
+    "receipts": [
+      {
+        "id": "RCPT-01",
+        "commitment_id": "CMT-01",
+        "project_id": "PRJ-01",
+        "kind": "导师辅导",
+        "state": "已核验",
+        "occurred_on": "2026-10-13",
+        "expected_units": 1,
+        "delivered_units": 1,
+        "disposition": null,
+        "provider_reported_at": "2026-10-13",
+        "receiver_confirmed_at": "2026-10-14",
+        "evidence_refs": [
+          "note://mentor-review/CMT-01"
+        ],
+        "summary": "陈工指出验证计划缺少边界温度点，团队补充2个测试用例并约定10-27复盘"
+      },
+      {
+        "id": "RCPT-02",
+        "commitment_id": "CMT-02",
+        "project_id": "PRJ-01",
+        "kind": "试制场地",
+        "state": "部分完成",
+        "occurred_on": "2026-12-20",
+        "expected_units": 92,
+        "delivered_units": 76,
+        "disposition": {
+          "type": "延期",
+          "detail": "消防检修导致后16天不可用，顺延至SLT-SITE-EXT（2027-01-04至2027-01-19）",
+          "new_slot_id": "SLT-SITE-EXT",
+          "reported_at": "2026-12-20",
+          "acknowledged_by_receiver_at": null
+        },
+        "provider_reported_at": "2026-12-20",
+        "receiver_confirmed_at": null,
+        "evidence_refs": [
+          "file://site-inspection/2026-fire-drill"
+        ],
+        "summary": "前76天场地正常可用，团队完成两版工程片焊接调试；余16天顺延，等待接受方确认延期安排"
+      },
+      {
+        "id": "RCPT-03",
+        "commitment_id": "CMT-05",
+        "project_id": "PRJ-01",
+        "kind": "政策协助",
+        "state": "已核验",
+        "occurred_on": "2026-11-05",
+        "expected_units": 1,
+        "delivered_units": 1,
+        "disposition": null,
+        "provider_reported_at": "2026-11-05",
+        "receiver_confirmed_at": "2026-11-06",
+        "evidence_refs": [
+          "note://policy-session/2026-11-05"
+        ],
+        "summary": "明确高企认定时间表与研发费用辅助账设置方式，团队当月建立辅助账"
+      },
+      {
+        "id": "RCPT-04",
+        "commitment_id": "CMT-06",
+        "project_id": "PRJ-02",
+        "kind": "导师辅导",
+        "state": "已核验",
+        "occurred_on": "2026-10-08",
+        "expected_units": 1,
+        "delivered_units": 1,
+        "disposition": null,
+        "provider_reported_at": "2026-10-08",
+        "receiver_confirmed_at": "2026-10-09",
+        "evidence_refs": [
+          "note://mentor-battery/CMT-06"
+        ],
+        "summary": "基于脱敏资料完成工艺窗口评审，建议收窄注液湿度区间；记录不含融资状态、机构名单与估值"
+      },
+      {
+        "id": "RCPT-05",
+        "commitment_id": "CMT-03",
+        "project_id": "PRJ-01",
+        "kind": "企业试验",
+        "state": "已取消",
+        "occurred_on": null,
+        "expected_units": 1,
+        "delivered_units": 0,
+        "disposition": {
+          "type": "取消",
+          "detail": "流片延后导致第46周无法送样；未确认占用即取消，容量回池，后续以CMT-08重新匹配2027年第5周档期",
+          "new_slot_id": "SLT-TST-W05",
+          "reported_at": "2026-09-26",
+          "acknowledged_by_receiver_at": "2026-09-26"
+        },
+        "provider_reported_at": null,
+        "receiver_confirmed_at": "2026-09-26",
+        "evidence_refs": [],
+        "summary": "取消发生在占用之前，资源未被锁死；去向为候补池，并已重新匹配到2027年第5周（CMT-08，待接受方确认）"
+      }
+    ],
+    "outcomes": [
+      {
+        "id": "OUT-01",
+        "project_id": "PRJ-01",
+        "kind": "试制完成",
+        "title": "两版工程片在溪村智造园完成焊接与初步调试",
+        "commitment_ids": [
+          "CMT-02"
+        ],
+        "date": "2026-12-15",
+        "verified": true,
+        "verified_by": "U-LEAD-01",
+        "verified_at": "2026-12-16",
+        "evidence_refs": [
+          "file://engineering-batch/v2-debug"
+        ],
+        "summary": "依托承诺场地完成实物试制（实际使用76天，余16天顺延中）"
+      },
+      {
+        "id": "OUT-02",
+        "project_id": "PRJ-01",
+        "kind": "验证完成",
+        "title": "芯片验证计划评审通过，新增边界温度测试用例",
+        "commitment_ids": [
+          "CMT-01"
+        ],
+        "date": "2026-10-13",
+        "verified": true,
+        "verified_by": "U-LEAD-01",
+        "verified_at": "2026-10-14",
+        "evidence_refs": [
+          "note://mentor-review/CMT-01"
+        ],
+        "summary": "导师时段直接产出测试覆盖度改进"
+      },
+      {
+        "id": "OUT-03",
+        "project_id": "PRJ-01",
+        "kind": "合作达成",
+        "title": "与某制造企业测试中心签署下一批工程片测试合作单",
+        "commitment_ids": [],
+        "date": "2026-12-28",
+        "verified": false,
+        "verified_by": null,
+        "verified_at": null,
+        "evidence_refs": [],
+        "summary": "CMT-03取消后双方私下接洽签单，未挂接任何平台承诺；平台无法确认该合作由对接产生，不计入平台兑现统计（漏统示例）"
+      },
+      {
+        "id": "OUT-04",
+        "project_id": "PRJ-01",
+        "kind": "合作达成",
+        "title": "建立研发费用辅助账，2026年度研发费用归集口径达标",
+        "commitment_ids": [
+          "CMT-05"
+        ],
+        "date": "2026-11-30",
+        "verified": true,
+        "verified_by": "U-POLICY-01",
+        "verified_at": "2026-11-30",
+        "evidence_refs": [
+          "note://policy-session/2026-11-05"
+        ],
+        "summary": "政策协助转化为企业可复用的合规能力"
+      },
+      {
+        "id": "OUT-05",
+        "project_id": "PRJ-02",
+        "kind": "验证完成",
+        "title": "注液湿度工艺窗口收窄至45%RH以下（脱敏记录）",
+        "commitment_ids": [
+          "CMT-06"
+        ],
+        "date": "2026-10-08",
+        "verified": true,
+        "verified_by": "U-LEAD-02",
+        "verified_at": "2026-10-09",
+        "evidence_refs": [
+          "note://mentor-battery/CMT-06"
+        ],
+        "summary": "导师仅接触脱敏资料；本记录及对外提醒均不含融资状态、机构名单与估值"
+      }
+    ]
   }
 }

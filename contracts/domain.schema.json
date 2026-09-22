@@ -2,52 +2,270 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "科创资源承诺兑现领域资料",
   "type": "object",
-  "required": [
-    "domain",
-    "version",
-    "sample_id",
-    "record_types",
-    "workflow_states",
-    "facts",
-    "sample"
-  ],
+  "required": ["domain", "version", "sample_id", "record_types", "workflow_states", "facts"],
   "properties": {
-    "domain": {
-      "const": "innovation-resource-commitment"
-    },
-    "version": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "sample_id": {
-      "type": "string",
-      "minLength": 1
-    },
+    "domain": { "const": "innovation-resource-commitment-fulfillment" },
+    "version": { "type": "integer", "minimum": 1 },
+    "sample_id": { "type": "string", "minLength": 1 },
     "record_types": {
       "type": "array",
       "minItems": 3,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" },
+      "contains": { "const": "服务承诺" }
     },
     "workflow_states": {
       "type": "array",
       "minItems": 3,
       "items": {
-        "type": "string"
+        "enum": [
+          "待承诺",
+          "已承诺",
+          "等待接受方确认",
+          "已确认占用",
+          "履约中",
+          "部分完成",
+          "已完成",
+          "已核验",
+          "已取消",
+          "已转交",
+          "已延期",
+          "已拒绝",
+          "已释放(未确认超时)",
+          "等待提供方确认结果"
+        ]
       }
     },
     "facts": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "sample": {
       "type": "object",
-      "minProperties": 3
+      "required": ["scenario_as_of", "projects", "gaps", "resources", "commitments", "occupancies", "receipts", "outcomes"],
+      "properties": {
+        "scenario_as_of": { "type": "string", "format": "date" },
+        "timeline_through": { "type": "string" },
+        "projects": { "type": "array", "items": { "$ref": "#/$defs/project" } },
+        "users": { "type": "array", "items": { "$ref": "#/$defs/user" } },
+        "gaps": { "type": "array", "items": { "$ref": "#/$defs/gap" } },
+        "resources": { "type": "array", "items": { "$ref": "#/$defs/resource" } },
+        "commitments": { "type": "array", "items": { "$ref": "#/$defs/commitment" } },
+        "occupancies": { "type": "array", "items": { "$ref": "#/$defs/occupancy" } },
+        "receipts": { "type": "array", "items": { "$ref": "#/$defs/receipt" } },
+        "outcomes": { "type": "array", "items": { "$ref": "#/$defs/outcome" } }
+      },
+      "additionalProperties": false
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "contact": {
+      "type": "object",
+      "required": ["name", "phone"],
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "nextAction": {
+      "type": "object",
+      "required": ["who", "what"],
+      "properties": {
+        "who": { "type": "string", "description": "责任人用户ID" },
+        "what": { "type": "string" },
+        "by": { "type": ["string", "null"] },
+        "contact": { "$ref": "#/$defs/contact" }
+      },
+      "additionalProperties": false
+    },
+    "disposition": {
+      "type": "object",
+      "required": ["type", "detail"],
+      "properties": {
+        "type": { "enum": ["取消", "转交", "延期", "部分完成"] },
+        "detail": { "type": "string", "minLength": 1 },
+        "new_slot_id": { "type": ["string", "null"] },
+        "reported_at": { "type": "string" },
+        "acknowledged_by_receiver_at": { "type": ["string", "null"] },
+        "acknowledged_by_provider_at": { "type": ["string", "null"] },
+        "released_capacity_to": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "handover": {
+      "type": "object",
+      "required": ["from_user_id", "to_user_id", "at", "reason"],
+      "properties": {
+        "from_user_id": { "type": "string" },
+        "to_user_id": { "type": "string" },
+        "at": { "type": "string" },
+        "reason": { "type": "string" },
+        "acknowledged_by_receiver_at": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "required": ["id", "name", "stage", "contact_user_id", "confidential"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "team_name": { "type": "string" },
+        "stage": { "type": "string" },
+        "contact_user_id": { "type": "string" },
+        "confidential": { "type": "boolean" },
+        "confidential_fields": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "user": {
+      "type": "object",
+      "required": ["id", "name", "role", "organization", "confidential_view"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "organization": { "type": "string" },
+        "phone": { "type": "string" },
+        "confidential_view": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "gap": {
+      "type": "object",
+      "required": ["id", "project_id", "stage", "type", "description", "declared_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "stage": { "type": "string" },
+        "type": { "enum": ["导师时段", "设备场地", "企业试验", "融资接洽", "政策协助"] },
+        "description": { "type": "string" },
+        "priority": { "enum": ["高", "中", "低"] },
+        "declared_at": { "type": "string" },
+        "needed_by": { "type": "string" },
+        "funding_status": { "type": "string" },
+        "investor_outreach": { "type": "string" },
+        "valuation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "slot": {
+      "type": "object",
+      "required": ["slot_id", "start", "end", "capacity"],
+      "properties": {
+        "slot_id": { "type": "string" },
+        "start": { "type": "string" },
+        "end": { "type": "string" },
+        "capacity": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "resource": {
+      "type": "object",
+      "required": ["id", "type", "title", "provider_org", "owner_id", "slots"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "enum": ["导师时段", "设备场地", "企业试验", "融资接洽", "政策协助"] },
+        "title": { "type": "string" },
+        "provider_org": { "type": "string" },
+        "owner_id": { "type": "string" },
+        "commit_reply_deadline_days": { "type": "integer", "minimum": 0 },
+        "confirm_deadline_days": { "type": "integer", "minimum": 0 },
+        "slots": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/slot" } }
+      },
+      "additionalProperties": false
+    },
+    "commitment": {
+      "type": "object",
+      "required": [
+        "id", "gap_id", "project_id", "resource_id", "slot_id", "provider_org",
+        "responsible_user_id", "capacity", "made_at", "commit_reply_by",
+        "confirm_deadline", "state"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "gap_id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "resource_id": { "type": "string" },
+        "slot_id": { "type": "string" },
+        "provider_org": { "type": "string" },
+        "responsible_user_id": { "type": "string" },
+        "capacity": { "type": "integer", "minimum": 1 },
+        "quantity": { "type": "string" },
+        "made_at": { "type": "string" },
+        "commit_reply_by": { "type": "string" },
+        "confirm_deadline": { "type": "string" },
+        "state": {
+          "enum": [
+            "已承诺", "等待接受方确认", "已确认占用", "履约中", "部分完成",
+            "已完成", "已核验", "已取消", "已转交", "已延期",
+            "已拒绝", "已释放(未确认超时)"
+          ]
+        },
+        "receiver_confirmed_at": { "type": ["string", "null"] },
+        "occupancy_id": { "type": ["string", "null"] },
+        "handover": { "oneOf": [{ "$ref": "#/$defs/handover" }, { "type": "null" }] },
+        "disposition": { "oneOf": [{ "$ref": "#/$defs/disposition" }, { "type": "null" }] },
+        "next_action": { "oneOf": [{ "$ref": "#/$defs/nextAction" }, { "type": "null" }] },
+        "release_reason": { "type": "string" },
+        "release_at": { "type": "string" },
+        "reject_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "occupancy": {
+      "type": "object",
+      "required": ["id", "commitment_id", "resource_id", "slot_id", "project_id", "units"],
+      "properties": {
+        "id": { "type": "string" },
+        "commitment_id": { "type": "string" },
+        "resource_id": { "type": "string" },
+        "slot_id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "units": { "type": "integer", "minimum": 1 },
+        "from": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["id", "commitment_id", "project_id", "kind", "state", "expected_units", "delivered_units"],
+      "properties": {
+        "id": { "type": "string" },
+        "commitment_id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "kind": { "type": "string" },
+        "state": { "enum": ["部分完成", "已完成", "已核验", "已取消", "已延期"] },
+        "occurred_on": { "type": ["string", "null"] },
+        "expected_units": { "type": "number", "minimum": 0 },
+        "delivered_units": { "type": "number", "minimum": 0 },
+        "disposition": { "oneOf": [{ "$ref": "#/$defs/disposition" }, { "type": "null" }] },
+        "provider_reported_at": { "type": ["string", "null"] },
+        "receiver_confirmed_at": { "type": ["string", "null"] },
+        "evidence_refs": { "type": "array", "items": { "type": "string" } },
+        "summary": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "outcome": {
+      "type": "object",
+      "required": ["id", "project_id", "kind", "title", "commitment_ids", "date", "verified"],
+      "properties": {
+        "id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "kind": { "enum": ["试制完成", "验证完成", "合作达成"] },
+        "title": { "type": "string" },
+        "commitment_ids": { "type": "array", "items": { "type": "string" } },
+        "date": { "type": "string" },
+        "verified": { "type": "boolean" },
+        "verified_by": { "type": ["string", "null"] },
+        "verified_at": { "type": ["string", "null"] },
+        "evidence_refs": { "type": "array", "items": { "type": "string" } },
+        "summary": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
 }
